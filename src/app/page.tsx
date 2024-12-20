@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
-import {LogIn} from "lucide-react"
+import { LogIn } from "lucide-react";
 import Fileupload from "@/components/Fileupload";
 
 export default async function Home() {
@@ -20,18 +20,20 @@ export default async function Home() {
             {isAuth && <Button>Go to Chats</Button>}
           </div>
 
-          <p className="max-w-lg mt-0 ml-8 text-lg text-slate-600">
-            Join millions of students, researchers and professionals to
-            instantly answer questions and understand research with AI
+          <p className="max-w-xl mx-auto mt-4 text-lg text-center text-slate-600 leading-relaxed">
+            Join millions of students, researchers, and professionals to
+            instantly answer questions and understand research with AI.
           </p>
 
-          <div className="max-w-lg mt-4 mr-4">
-            {isAuth ? (<Fileupload/>) : (
-              <Link href= "/sign-in">
-                <Button>Login to get started
-                  <LogIn className="w-4 h-4 "/>
+          <div className="w-full mt-4 mr-4 pb">
+            {isAuth ? (
+              <Fileupload />
+            ) : (
+              <Link href="/sign-in">
+                <Button>
+                  Login to get started
+                  <LogIn className="w-4 h-4 ml-2" />
                 </Button>
-
               </Link>
             )}
           </div>
