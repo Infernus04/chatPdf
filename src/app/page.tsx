@@ -20,17 +20,17 @@ export default async function Home() {
             {isAuth && <Button>Go to Chats</Button>}
           </div>
 
-          <p className="max-w-xl mx-auto mt-4 text-lg text-center text-slate-600 leading-relaxed">
+          <p className="max-w-xl mt-4 text-lg text-center text-slate-600 ">
             Join millions of students, researchers, and professionals to
             instantly answer questions and understand research with AI.
           </p>
 
-          <div className="w-full mt-4 mr-4 pb">
+          <div className="w-full mt-4 ">
             {isAuth ? (
               <Fileupload />
             ) : (
               <Link href="/sign-in">
-                <Button>
+                <Button className="ml-52">
                   Login to get started
                   <LogIn className="w-4 h-4 ml-2" />
                 </Button>
