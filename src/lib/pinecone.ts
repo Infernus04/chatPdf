@@ -4,7 +4,7 @@ import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import {Document , RecursiveCharacterTextSplitter} from "@pinecone-database/doc-splitter"
 import { getEmbeddings } from "./embeddings";
 import md5 from "md5";
-import { text } from "stream/consumers";
+import { converToAscii } from "./utils";
  
 export const getPineconeClient = () => {
   return new Pinecone({
@@ -35,6 +35,18 @@ export async function loadS3intoPinecone(fileKey: string) {
   const documents = await Promise.all(pages.map(prepareDocument))
 
   //Vectorise and embed individual documents
+  const vectors = await Promise.all(documents.flat().map(embedDocument));
+
+  //upload to pinecone
+  const client = await getPineconeClient();
+  const pineconeIndex = await client.index("chatpdf");
+  const namespace = pineconeIndex.namespace(converToAscii(fileKey));
+
+
+  console.log("inserting vectors to pinecone");
+  await namespace.upsert(vectors);
+  return documents[0];
+
 
 }
 

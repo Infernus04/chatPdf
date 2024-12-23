@@ -13,7 +13,7 @@ export async function uploadToS3(file : File){
             region : "ap-south-1"
         })
         
-        const file_key = "uploads/" + Date.now().toString() + file.name.replace("" , "-")
+        const file_key = "uploads/" + Date.now().toString() + file.name.replace(/\s + /g, "-")
 
         const params = {
             Bucket : process.env.NEXT_PUBLIC_S3_BUCKET_NAME!,
@@ -35,7 +35,7 @@ export async function uploadToS3(file : File){
             file_name : file.name,
         })
     } catch (error) {
-        
+        console.log(error);
     }
 }
 
