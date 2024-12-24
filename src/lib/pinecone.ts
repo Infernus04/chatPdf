@@ -4,7 +4,7 @@ import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import {Document , RecursiveCharacterTextSplitter} from "@pinecone-database/doc-splitter"
 import { getEmbeddings } from "./embeddings";
 import md5 from "md5";
-import { converToAscii } from "./utils";
+import { convertToAscii } from "./utils";
  
 export const getPineconeClient = () => {
   return new Pinecone({
@@ -26,9 +26,9 @@ export async function loadS3intoPinecone(fileKey: string) {
   if (!file_name) {
     throw new Error("Could not download from s3");
   }
+  console.log("loading pdf into memory" + file_name);
   const loader = new PDFLoader(file_name);
   const pages = (await loader.load())as PDFPage[];
-  
   
   //split and segment the pdf into pages
   //pages = Array(13)
@@ -38,9 +38,9 @@ export async function loadS3intoPinecone(fileKey: string) {
   const vectors = await Promise.all(documents.flat().map(embedDocument));
 
   //upload to pinecone
-  const client = await getPineconeClient();
-  const pineconeIndex = await client.index("chatpdf");
-  const namespace = pineconeIndex.namespace(converToAscii(fileKey));
+  const client =  getPineconeClient();
+  const pineconeIndex =  client.index("chatpdf");
+  const namespace = pineconeIndex.namespace(convertToAscii(fileKey));
 
 
   console.log("inserting vectors to pinecone");
@@ -71,12 +71,8 @@ async function embedDocument(doc : Document){
 }
 
 export const truncateStringByBytes = (str: string, bytes: number): string => {
-  const encoder = new TextEncoder();
-  const decoder = new TextDecoder("utf-8");
-
-  const encodedBytes = encoder.encode(str);
-  const truncatedBytes = encodedBytes.slice(0, bytes);
-  return decoder.decode(truncatedBytes);
+  const enc = new TextEncoder();
+  return new TextDecoder("utf-8").decode(enc.encode(str).slice(0, bytes));
 };
 
 
@@ -92,9 +88,9 @@ async function prepareDocument(page : PDFPage){
       metadata : {
         pageNumber : metadata.loc.pageNumber,
         text : truncateStringByBytes(pageContent,36000)
-       }
-    })
-  ])
+       },
+    }),
+  ]);
 
   return docs;
 
