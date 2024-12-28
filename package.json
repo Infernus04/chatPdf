@@ -19,6 +19,7 @@
     "@pinecone-database/pinecone": "^4.0.0",
     "@radix-ui/react-slot": "^1.1.1",
     "@tanstack/react-query": "^5.62.8",
+    "ai": "^4.0.22",
     "aws": "^0.0.3-2",
     "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",
